@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Questionnaire</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f9fa;
+      color: #495057;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    #questionsContainer {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 2px solid #007bff;
+      margin-bottom: 20px;
+      overflow-y: auto;
+      display: block;
+    }
+
+    div {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #007bff;
+    }
+
+    .options-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .options-container button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 50px;
+      box-sizing: border-box;
+    }
+
+    .options-container button:hover {
+      background-color: #0056b3;
+    }
+
+    .options-container button.selected {
+      background-color: #28a745;
+    }
+
+    #generateButton {
+      display: block;
+      background-color: #007bff;
+      color: #fff;
+      width: 100px;
+      margin: 10px;
+      border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+      #questionsContainer {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div>
+    <h1>Dynamic Questionnaire</h1>
+
+    <label for="numQuestions">Number of Questions:</label>
+    <input type="number" id="numQuestions" min="1" value="1">
+    <button id="generateButton" type="button" onclick="generateQuestions()">Generate Questions</button>
+    <div id="questionsContainer"></div>
+  </div>
+  <script>
+    function generateQuestions() {
+      var numQuestions = document.getElementById("numQuestions").value;
+      var questionDiv = document.getElementById("questionsContainer");
+      questionDiv.innerHTML = "";
+
+      for (var i = 1; i <= numQuestions; i++) {
+        questionDiv.innerHTML += `
+          <div>
+            <label for="q${i}">Question ${i}: What is your choice?</label>
+            <div class="options-container">
+              <button type="button" onclick="chooseOption('a', ${i})" data-option="a">أ</button>
+              <button type="button" onclick="chooseOption('b', ${i})" data-option="b">ب</button>
+              <button type="button" onclick="chooseOption('c', ${i})" data-option="c">ج</button>
+              <button type="button" onclick="chooseOption('d', ${i})" data-option="d">د</button>
+            </div>
+            <input type="hidden" id="q${i}" name="q${i}" value="">
+          </div>
+        `;
+      }
+    }
+
+    function chooseOption(option, questionNumber) {
+      var selectedOption = option;
+      var questionName = "q" + questionNumber;
+      document.getElementById(questionName).value = selectedOption;
+
+      // Toggle the 'selected' class for styling
+      var buttons = document.querySelectorAll(`#questionsContainer div:nth-child(${questionNumber}) .options-container button`);
+      buttons.forEach(function (button) {
+        button.classList.remove('selected');
+      });
+
+      var selectedButton = document.querySelector(`#questionsContainer div:nth-child(${questionNumber}) .options-container button[data-option="${option}"]`);
+      if (selectedButton) {
+        selectedButton.classList.add('selected');
+      }
+    }
+  </script>
+
+
+</body>
+
+</html>
