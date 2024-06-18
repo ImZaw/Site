@@ -22,11 +22,11 @@ document.getElementById('questionRangeForm').addEventListener('submit', function
 });
 function startQuiz(start, end) {
   totalQuestions = end - start
-  currentQuestion = start-1; // Reset current question index
+  currentQuestion = start; // Reset current question index
   var questionContainer = document.getElementById("questionContainer");
   questionContainer.innerHTML = "";
 
-  for (var i = start-1; i <= totalQuestions; i++) {
+  for (var i = start; i <= totalQuestions; i++) {
     questionContainer.innerHTML += `
       <div class="card" id="question${i}" style="display: ${i === 1 ? 'block' : 'none'};">
         <h3>Question ${i}</h3>
