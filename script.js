@@ -136,6 +136,7 @@ function displayPresets() {
 }
 function updatePreset(index) {
   var preset = savedPresets[index];
+  preset.answers = []
   var presetName = preset.name;
   for (var i = 1; i <= totalQuestions; i++) {
     var questionName = `q${i}`;
@@ -168,7 +169,7 @@ function deletePreset(index) {
 
 function loadPreset(index) {
   var preset = savedPresets[index];
-  currentPresetIndex = index
+  window.currentPresetIndex = index
   currentQuestion = 1; // Reset current question index
   generateQuestions(preset.numQuestions);
   var questionContainer = document.getElementById("questionContainer");
