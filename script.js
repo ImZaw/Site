@@ -7,8 +7,8 @@ function updateProgressBar() {
   var progressBar = document.getElementById('progressBar');
   progressBar.style.width = `${progress}%`;
 }
-function generateQuestions() {
-  totalQuestions = parseInt(document.getElementById("numQuestions").value);
+function generateQuestions(number) {
+  totalQuestions = parseInt(number);
   currentQuestion = 1; // Reset current question index
   var questionContainer = document.getElementById("questionContainer");
   questionContainer.innerHTML = "";
@@ -140,16 +140,22 @@ function updatePreset(index) {
   for (var i = 1; i <= totalQuestions; i++) {
     var questionName = `q${i}`;
     var answer = document.getElementById(questionName).value;
-    var existingAnswerIndex = preset.answers.findIndex(ans => ans.question === i);
-
-    if (existingAnswerIndex !== -1) {
-      preset.answers[existingAnswerIndex].answer = answer;
-    } else {
+    if (answer) {
       preset.answers.push({ question: i, answer: answer });
+      preset.answeredQuestions++;
     }
   }
 
+  // Check if a preset with the same name already exists
+  var existingIndex = savedPresets.findIndex(p => p.name === presetName);
+  if (existingIndex !== -1) {
+    savedPresets.splice(existingIndex, 1, preset); // Replace existing preset
+  } else {
+    savedPresets.push(preset); // Add new preset
+  }
+
   savePresetsToLocalStorage();
+  displayPresets();
   showNotification("Preset updated successfully!", false);
 }
 
@@ -163,9 +169,8 @@ function deletePreset(index) {
 function loadPreset(index) {
   var preset = savedPresets[index];
   currentPresetIndex = index
-  document.getElementById("numQuestions").value = preset.numQuestions;
   currentQuestion = 1; // Reset current question index
-  generateQuestions();
+  generateQuestions(preset.numQuestions);
   var questionContainer = document.getElementById("questionContainer");
   questionContainer.querySelectorAll('.option').forEach(option => {
     option.classList.remove('selected');
