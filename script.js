@@ -1,14 +1,15 @@
 var currentQuestion = 1;
 var totalQuestions = 1;
 var savedPresets = loadPresetsFromLocalStorage();
+var currentPreset;
 var currentPresetIndex = -1;
 function updateProgressBar() {
   var progress = (currentQuestion - 1) / totalQuestions * 100;
   var progressBar = document.getElementById('progressBar');
   progressBar.style.width = `${progress}%`;
 }
-
 function generateQuestions() {
+  currentPreset = null;
   totalQuestions = parseInt(document.getElementById("numQuestions").value);
   currentQuestion = 1; // Reset current question index
   var questionContainer = document.getElementById("questionContainer");
@@ -19,10 +20,10 @@ function generateQuestions() {
       <div class="card" id="question${i}" style="display: ${i === 1 ? 'block' : 'none'};">
         <h3>Question ${i}</h3>
         <div class="options-container">
-          <button type="button" class="option" onclick="chooseOption('أ', ${i})" data-option="أ">أ</button>
-          <button type="button" class="option" onclick="chooseOption('ب', ${i})" data-option="ب">ب</button>
-          <button type="button" class="option" onclick="chooseOption('ج', ${i})" data-option="ج">ج</button>
-          <button type="button" class="option" onclick="chooseOption('د', ${i})" data-option="د">د</button>
+          <button type="button" class="option" onclick="chooseOption('a', ${i})" data-option="a">A</button>
+          <button type="button" class="option" onclick="chooseOption('b', ${i})" data-option="b">B</button>
+          <button type="button" class="option" onclick="chooseOption('c', ${i})" data-option="c">C</button>
+          <button type="button" class="option" onclick="chooseOption('d', ${i})" data-option="d">D</button>
         </div>
         <input type="hidden" id="q${i}" name="q${i}" value="">
       </div>
@@ -64,10 +65,6 @@ function nextQuestion() {
   document.getElementById(`question${currentQuestion}`).style.display = 'block';
   updateNavigationButtons();
   updateProgressBar();
-  if(currentPresetIndex !== -1) {
-    showNotifcation("Autosave!", false)
-    updatePreset(currentPresetIndex)
-  }
 }
 
 function updateNavigationButtons() {
@@ -168,6 +165,7 @@ function loadPreset(index) {
   var preset = savedPresets[index];
   currentPreset = index;
   totalQuestions = preset.numQuestions;
+  currentQuestion = 1; // Reset current question index
   generateQuestions();
   var questionContainer = document.getElementById("questionContainer");
   questionContainer.querySelectorAll('.option').forEach(option => {
@@ -177,7 +175,7 @@ function loadPreset(index) {
     var { question, answer: option } = answer;
     chooseOption(option, question);
   });
-  showNotification("Loaded " + preset.name + " preset", false)
+  showNotification("Loaded " + preset.name + "preset", false)
   updateJumpToOptions();
 }
 
@@ -223,7 +221,7 @@ function updateJumpToOptions() {
   var jumpToSelect = document.getElementById('jumpToQuestion');
   jumpToSelect.innerHTML = '';
   
-  for (var i = currentQuestion; i <= totalQuestions; i++) {
+  for (var i = 1; i <= totalQuestions; i++) {
     var option = document.createElement('option');
     option.value = i;
     option.textContent = `Question ${i}`;
