@@ -22,19 +22,19 @@ document.getElementById('questionRangeForm').addEventListener('submit', function
 });
 function startQuiz(start, end) {
   totalQuestions = end - start
-  currentQuestion = start; // Reset current question index
+  currentQuestion = start-1; // Reset current question index
   var questionContainer = document.getElementById("questionContainer");
   questionContainer.innerHTML = "";
 
-  for (var i = 1; i <= totalQuestions; i++) {
+  for (var i = start-1; i <= totalQuestions; i++) {
     questionContainer.innerHTML += `
-      <div class="card" id="question${start+i}" style="display: ${i === 1 ? 'block' : 'none'};">
-        <h3>Question ${start+i}</h3>
+      <div class="card" id="question${i}" style="display: ${i === 1 ? 'block' : 'none'};">
+        <h3>Question ${i}</h3>
         <div class="options-container">
-          <button type="button" class="option" onclick="chooseOption('أ', ${start+i})" data-option="أ">أ</button>
-          <button type="button" class="option" onclick="chooseOption('ب', ${start+i})" data-option="ب">ب</button>
-          <button type="button" class="option" onclick="chooseOption('ج', ${start+i})" data-option="ج">ج</button>
-          <button type="button" class="option" onclick="chooseOption('د', ${start+i})" data-option="د">د</button>
+          <button type="button" class="option" onclick="chooseOption('أ', ${i})" data-option="أ">أ</button>
+          <button type="button" class="option" onclick="chooseOption('ب', ${i})" data-option="ب">ب</button>
+          <button type="button" class="option" onclick="chooseOption('ج', ${i})" data-option="ج">ج</button>
+          <button type="button" class="option" onclick="chooseOption('د', ${i})" data-option="د">د</button>
         </div>
         <input type="hidden" id="q${i}" name="q${i}" value="">
       </div>
@@ -57,10 +57,10 @@ function generateQuestions() {
       <div class="card" id="question${i}" style="display: ${i === 1 ? 'block' : 'none'};">
         <h3>Question ${i}</h3>
         <div class="options-container">
-          <button type="button" class="option" onclick="chooseOption('a', ${i})" data-option="a">A</button>
-          <button type="button" class="option" onclick="chooseOption('b', ${i})" data-option="b">B</button>
-          <button type="button" class="option" onclick="chooseOption('c', ${i})" data-option="c">C</button>
-          <button type="button" class="option" onclick="chooseOption('d', ${i})" data-option="d">D</button>
+          <button type="button" class="option" onclick="chooseOption('أ', ${i})" data-option="أ">أ</button>
+          <button type="button" class="option" onclick="chooseOption('ب', ${i})" data-option="ب">ب</button>
+          <button type="button" class="option" onclick="chooseOption('ج', ${i})" data-option="ج">ج</button>
+          <button type="button" class="option" onclick="chooseOption('د', ${i})" data-option="د">د</button>
         </div>
         <input type="hidden" id="q${i}" name="q${i}" value="">
       </div>
