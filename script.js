@@ -1,7 +1,6 @@
 var currentQuestion = 1;
 var totalQuestions = 1;
 var savedPresets = loadPresetsFromLocalStorage();
-var currentPreset;
 var currentPresetIndex = -1;
 function updateProgressBar() {
   var progress = (currentQuestion - 1) / totalQuestions * 100;
@@ -48,7 +47,6 @@ function startQuiz(start, end) {
   updateNavigationButtons();
 }
 function generateQuestions() {
-  currentPreset = null;
   totalQuestions = parseInt(document.getElementById("numQuestions").value);
   currentQuestion = 1; // Reset current question index
   var questionContainer = document.getElementById("questionContainer");
@@ -104,6 +102,10 @@ function nextQuestion() {
   document.getElementById(`question${currentQuestion}`).style.display = 'block';
   updateNavigationButtons();
   updateProgressBar();
+  if(currentPresetIndex !== -1) {
+    showNotifcation("Autosave!", false)
+    updatePreset(currentPresetIndex)
+  }
 }
 
 function updateNavigationButtons() {
@@ -204,7 +206,6 @@ function loadPreset(index) {
   var preset = savedPresets[index];
   currentPreset = index;
   totalQuestions = preset.numQuestions;
-  currentQuestion = 1; // Reset current question index
   generateQuestions();
   var questionContainer = document.getElementById("questionContainer");
   questionContainer.querySelectorAll('.option').forEach(option => {
@@ -214,7 +215,7 @@ function loadPreset(index) {
     var { question, answer: option } = answer;
     chooseOption(option, question);
   });
-  showNotification("Loaded " + preset.name + "preset", false)
+  showNotification("Loaded " + preset.name + " preset", false)
   updateJumpToOptions();
 }
 
