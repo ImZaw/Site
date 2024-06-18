@@ -147,7 +147,7 @@ function updatePreset(index) {
   }
 
   // Check if a preset with the same name already exists
-  var existingIndex = savedPresets.findIndex(p => p.name === presetName);
+  var existingIndex = savedPresets.findIndex(p => p.name === preset.name);
   if (existingIndex !== -1) {
     savedPresets.splice(existingIndex, 1, preset); // Replace existing preset
   } else {
