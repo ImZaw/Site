@@ -1,7 +1,6 @@
 var currentQuestion = 1;
 var totalQuestions = 1;
 var savedPresets = loadPresetsFromLocalStorage();
-var currentPreset;
 var currentPresetIndex = -1;
 function updateProgressBar() {
   var progress = (currentQuestion - 1) / totalQuestions * 100;
@@ -9,7 +8,6 @@ function updateProgressBar() {
   progressBar.style.width = `${progress}%`;
 }
 function generateQuestions() {
-  currentPreset = null;
   totalQuestions = parseInt(document.getElementById("numQuestions").value);
   currentQuestion = 1; // Reset current question index
   var questionContainer = document.getElementById("questionContainer");
@@ -163,7 +161,6 @@ function deletePreset(index) {
 
 function loadPreset(index) {
   var preset = savedPresets[index];
-  currentPreset = index;
   totalQuestions = preset.numQuestions;
   currentQuestion = 1; // Reset current question index
   generateQuestions();
