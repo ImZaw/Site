@@ -8,6 +8,45 @@ function updateProgressBar() {
   var progressBar = document.getElementById('progressBar');
   progressBar.style.width = `${progress}%`;
 }
+document.getElementById('questionRangeForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  const startQuestion = parseInt(document.getElementById('startQuestion').value);
+  const endQuestion = parseInt(document.getElementById('endQuestion').value);
+  
+  if (startQuestion <= 0 || endQuestion < startQuestion) {
+    alert('Please enter a valid range.');
+    return;
+  }
+
+  startQuiz(startQuestion, endQuestion);
+});
+function startQuiz(start, end) {
+  totalQuestions = end - start
+  currentQuestion = start; // Reset current question index
+  var questionContainer = document.getElementById("questionContainer");
+  questionContainer.innerHTML = "";
+
+  for (var i = 1; i <= totalQuestions; i++) {
+    questionContainer.innerHTML += `
+      <div class="card" id="question${start+i}" style="display: ${i === 1 ? 'block' : 'none'};">
+        <h3>Question ${start+i}</h3>
+        <div class="options-container">
+          <button type="button" class="option" onclick="chooseOption('أ', ${start+i})" data-option="أ">أ</button>
+          <button type="button" class="option" onclick="chooseOption('ب', ${start+i})" data-option="ب">ب</button>
+          <button type="button" class="option" onclick="chooseOption('ج', ${start+i})" data-option="ج">ج</button>
+          <button type="button" class="option" onclick="chooseOption('د', ${start+i})" data-option="د">د</button>
+        </div>
+        <input type="hidden" id="q${i}" name="q${i}" value="">
+      </div>
+    `;
+  }
+
+  currentPresetIndex = -1;
+  updateProgressBar();
+  updateJumpToOptions();
+  updateNavigationButtons();
+}
 function generateQuestions() {
   currentPreset = null;
   totalQuestions = parseInt(document.getElementById("numQuestions").value);
