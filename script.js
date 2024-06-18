@@ -1,7 +1,7 @@
+var currentPresetIndex = -1;
 var currentQuestion = 1;
 var totalQuestions = 1;
 var savedPresets = loadPresetsFromLocalStorage();
-var currentPresetIndex = -1;
 function updateProgressBar() {
   var progress = (currentQuestion - 1) / totalQuestions * 100;
   var progressBar = document.getElementById('progressBar');
@@ -136,17 +136,17 @@ function displayPresets() {
 }
 function updatePreset(index) {
   var preset = savedPresets[index];
-  preset.answers = []
+  var newAns = []
   var presetName = preset.name;
   for (var i = 1; i <= totalQuestions; i++) {
     var questionName = `q${i}`;
     var answer = document.getElementById(questionName).value;
     if (answer) {
-      preset.answers.push({ question: i, answer: answer });
+      newAns.push({ question: i, answer: answer });
       preset.answeredQuestions++;
     }
   }
-
+  preset.answers = newAns
   // Check if a preset with the same name already exists
   var existingIndex = savedPresets.findIndex(p => p.name === presetName);
   if (existingIndex !== -1) {
