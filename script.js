@@ -136,7 +136,7 @@ function displayPresets() {
 }
 function updatePreset(index) {
   var preset = savedPresets[index];
-
+ var presetName = preset.name
   for (var i = 1; i <= totalQuestions; i++) {
     var questionName = `q${i}`;
     var answer = document.getElementById(questionName).value;
@@ -147,7 +147,7 @@ function updatePreset(index) {
   }
 
   // Check if a preset with the same name already exists
-  var existingIndex = savedPresets.findIndex(p => p.name === preset.name);
+  var existingIndex = savedPresets.findIndex(p => p.name === presetName);
   if (existingIndex !== -1) {
     savedPresets.splice(existingIndex, 1, preset); // Replace existing preset
   } else {
