@@ -185,7 +185,7 @@ function showSummary() {
   var summaryContainer = document.createElement('div');
   summaryContainer.classList.add('summary-card');
 
-  for (var i = currentQuestion; i <= totalQuestions; i++) {
+  for (var i = 1; i <= totalQuestions; i++) {
     var questionName = `q${i}`;
     var answer = document.getElementById(questionName).value;
 
