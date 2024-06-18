@@ -8,7 +8,7 @@ function updateProgressBar() {
   progressBar.style.width = `${progress}%`;
 }
 function generateQuestions(number) {
-  totalQuestions = parseInt(number);
+  totalQuestions = parseInt(number)
   currentQuestion = 1; // Reset current question index
   var questionContainer = document.getElementById("questionContainer");
   questionContainer.innerHTML = "";
@@ -43,7 +43,7 @@ function chooseOption(option, questionNumber) {
   var selectedButton = document.querySelector(`#question${questionNumber} .option[data-option="${option}"]`);
   selectedButton.classList.add('selected');
   document.getElementById(questionName).value = option;
-  if(currentPresetIndex != -1) return updatePreset(currentPresetIndex);
+  if(currentPresetIndex != -1) {updatePreset(currentPresetIndex)}
 }
 
 function prevQuestion() {
@@ -136,7 +136,7 @@ function displayPresets() {
 }
 function updatePreset(index) {
   var preset = savedPresets[index];
- var presetName = preset.name
+  var presetName = preset.name;
   for (var i = 1; i <= totalQuestions; i++) {
     var questionName = `q${i}`;
     var answer = document.getElementById(questionName).value;
