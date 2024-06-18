@@ -146,10 +146,10 @@ function updatePreset(index) {
         preset.answers.splice(existingIndex, 1, { question: i, answer: answer }); // Replace existing answer
       } else {
         preset.answers.push({ question: i, answer: answer });
-        preset.answeredQuestions++
       }
     }
   }
+  preset.answeredQuestions = preset.answers.length
   // Check if a preset with the same name already exists
   var existingIndex = savedPresets.findIndex(p => p.name === presetName);
   if (existingIndex !== -1) {
@@ -172,7 +172,7 @@ function deletePreset(index) {
 
 function loadPreset(index) {
   var preset = savedPresets[index];
-  window.currentPresetIndex = index
+  currentPresetIndex = index
   currentQuestion = 1; // Reset current question index
   generateQuestions(preset.numQuestions);
   var questionContainer = document.getElementById("questionContainer");
