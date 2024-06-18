@@ -15,7 +15,7 @@
     <div>
       <label for="numQuestions">Number of Questions:</label>
       <input type="number" id="numQuestions" name="numQuestions" min="1" value="1">
-      <button onclick="generateQuestions()">Generate Questions</button>
+      <button onclick="generateQuestions(document.getElementById("numQuestions").value)">Generate Questions</button>
     </div>
 
     <div class="progress-container">
