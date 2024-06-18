@@ -223,7 +223,7 @@ function showSummary() {
   var summaryContainer = document.createElement('div');
   summaryContainer.classList.add('summary-card');
 
-  for (var i = 1; i <= totalQuestions; i++) {
+  for (var i = currentQuestion; i <= totalQuestions; i++) {
     var questionName = `q${i}`;
     var answer = document.getElementById(questionName).value;
 
@@ -261,7 +261,7 @@ function updateJumpToOptions() {
   var jumpToSelect = document.getElementById('jumpToQuestion');
   jumpToSelect.innerHTML = '';
   
-  for (var i = 1; i <= totalQuestions; i++) {
+  for (var i = currentQuestion; i <= totalQuestions; i++) {
     var option = document.createElement('option');
     option.value = i;
     option.textContent = `Question ${i}`;
