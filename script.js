@@ -7,21 +7,6 @@ function updateProgressBar() {
   var progressBar = document.getElementById('progressBar');
   progressBar.style.width = `${progress}%`;
 }
-function autoSavePreset() {
-  if (currentPresetIndex === -1) return; // No preset to auto-save
-
-  var preset = savedPresets[currentPresetIndex];
-  preset.answers = [];
-  preset.answeredQuestions = 0;
-
-  for (var i = 1; i <= totalQuestions; i++) {
-    var questionName = `q${i}`;
-    var answer = document.getElementById(questionName).value;
-    if (answer) {
-      preset.answers.push({ question: i, answer: answer });
-      preset.answeredQuestions++;
-    }
-  }
 function generateQuestions() {
   totalQuestions = parseInt(document.getElementById("numQuestions").value);
   currentQuestion = 1; // Reset current question index
@@ -58,7 +43,7 @@ function chooseOption(option, questionNumber) {
   var selectedButton = document.querySelector(`#question${questionNumber} .option[data-option="${option}"]`);
   selectedButton.classList.add('selected');
   document.getElementById(questionName).value = option;
-  autoSavePreset(); // Trigger auto-save on option selection
+  if(currentPresetIndex != -1) return updatePreset(currentPresetIndex);
 }
 
 function prevQuestion() {
@@ -125,8 +110,6 @@ function savePreset() {
   } else {
     savedPresets.push(preset); // Add new preset
   }
-  currentPresetIndex = savedPresets.findIndex(p => p.name === presetName);
-
 
   savePresetsToLocalStorage();
   displayPresets();
@@ -145,10 +128,29 @@ function displayPresets() {
           <span>${answeredQuestions} answered questions</span>
           <button onclick="deletePreset(${index})">Delete</button>
           <button onclick="loadPreset(${index})">Load</button>
+          <button onclick="updatePreset(${index})">Update</button>
         </div>
       </div>
     `;
   });
+}
+function updatePreset(index) {
+  var preset = savedPresets[index];
+
+  for (var i = 1; i <= totalQuestions; i++) {
+    var questionName = `q${i}`;
+    var answer = document.getElementById(questionName).value;
+    var existingAnswerIndex = preset.answers.findIndex(ans => ans.question === i);
+
+    if (existingAnswerIndex !== -1) {
+      preset.answers[existingAnswerIndex].answer = answer;
+    } else {
+      preset.answers.push({ question: i, answer: answer });
+    }
+  }
+
+  savePresetsToLocalStorage();
+  showNotification("Preset updated successfully!", false);
 }
 
 function deletePreset(index) {
@@ -160,7 +162,9 @@ function deletePreset(index) {
 
 function loadPreset(index) {
   var preset = savedPresets[index];
-  totalQuestions = preset.numQuestions;
+  currentPresetIndex = index
+  document.getElementById("numQuestions").value = preset.numQuestions;
+  currentQuestion = 1; // Reset current question index
   generateQuestions();
   var questionContainer = document.getElementById("questionContainer");
   questionContainer.querySelectorAll('.option').forEach(option => {
@@ -170,8 +174,7 @@ function loadPreset(index) {
     var { question, answer: option } = answer;
     chooseOption(option, question);
   });
-  currentPresetIndex = savedPresets.findIndex(p => p.name === presetName);
-  showNotification("Loaded " + preset.name + "preset", false)
+  showNotification("Loaded " + preset.name + " preset", false)
   updateJumpToOptions();
 }
 
