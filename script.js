@@ -43,7 +43,7 @@ function chooseOption(option, questionNumber) {
   var selectedButton = document.querySelector(`#question${questionNumber} .option[data-option="${option}"]`);
   selectedButton.classList.add('selected');
   document.getElementById(questionName).value = option;
-  if(currentPresetIndex > -1) {updatePreset(currentPresetIndex)}
+  if(currentPresetIndex !== -1) {updatePreset(currentPresetIndex)}
 }
 
 function prevQuestion() {
@@ -172,7 +172,7 @@ function deletePreset(index) {
 
 function loadPreset(index) {
   var preset = savedPresets[index];
-  currentPresetIndex = index
+
   currentQuestion = 1; // Reset current question index
   generateQuestions(preset.numQuestions);
   var questionContainer = document.getElementById("questionContainer");
@@ -183,6 +183,7 @@ function loadPreset(index) {
     var { question, answer: option } = answer;
     chooseOption(option, question);
   });
+  currentPresetIndex = index
   showNotification("Loaded " + preset.name + " preset", false)
   updateJumpToOptions();
 }
