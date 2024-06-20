@@ -45,6 +45,15 @@ function chooseOption(option, questionNumber) {
   document.getElementById(questionName).value = option;
   if(currentPresetIndex !== -1) {updatePreset(currentPresetIndex)}
 }
+function loadSummaryResults(preset) {
+    preset.correctAnswers.forEach(questionNumber => {
+        document.getElementById(`answer${questionNumber}`).classList.add('correct-answer');
+    });
+
+    preset.wrongAnswers.forEach(questionNumber => {
+        document.getElementById(`answer${questionNumber}`).classList.add('wrong-answer');
+    });
+}
 
 function prevQuestion() {
   document.getElementById(`question${currentQuestion}`).style.display = 'none';
@@ -59,6 +68,7 @@ function nextQuestion() {
   currentQuestion++;
   if (currentQuestion > totalQuestions) {
     showSummary();
+    if(currentPresetIndex !== -1) loadSummaryResults();
     return;
   }
   document.getElementById(`question${currentQuestion}`).style.display = 'block';
@@ -91,7 +101,9 @@ function savePreset() {
     name: presetName,
     numQuestions: totalQuestions,
     answeredQuestions: 0,
-    answers: []
+    answers: [],
+    correctAnswers: [],
+    wrongAnswers: []
   };
 
   for (var i = 1; i <= totalQuestions; i++) {
@@ -125,7 +137,7 @@ function displayPresets() {
       <div class="summary-card">
         <div class="summary-item">
           <span>Preset ${preset.name}</span>
-          <span>${answeredQuestions} answered questions</span>
+          <span>${answeredQuestions} answered questions out of ${preset.numQuestions}</span>
           <button onclick="deletePreset(${index})">Delete</button>
           <button onclick="loadPreset(${index})">Load</button>
           <button onclick="updatePreset(${index})">Update</button>
@@ -134,7 +146,7 @@ function displayPresets() {
     `;
   });
 }
-function updatePreset(index) {
+function updatePreset(index, isAuto) {
   var preset = savedPresets[index];
   var presetName = preset.name;
   for (var i = 1; i <= totalQuestions; i++) {
@@ -160,7 +172,11 @@ function updatePreset(index) {
 
   savePresetsToLocalStorage();
   displayPresets();
-  showNotification("Preset updated successfully!", false);
+  if(isAuto === true) {
+    showNotification("Preset autosaved successfully!", false);
+    } else {    
+    showNotification("Preset updated successfully!", false);
+  }
 }
 
 function deletePreset(index) {
@@ -184,7 +200,7 @@ function loadPreset(index) {
     chooseOption(option, question);
   });
   currentPresetIndex = index
-  showNotification("Loaded " + preset.name + " preset", false)
+  showNotification(preset.name + " loaded successfully!", false)
   updateJumpToOptions();
 }
 
@@ -220,11 +236,33 @@ function markAnswer(questionNumber, isCorrect) {
   if (isCorrect) {
     answerElement.classList.remove('wrong-answer');
     answerElement.classList.add('correct-answer');
+    if(currentPresetIndex !== -1) refreshResult();
   } else {
     answerElement.classList.remove('correct-answer');
     answerElement.classList.add('wrong-answer');
+    if(currentPresetIndex !== -1) refreshResult();
   }
 }
+function refreshResult() {
+    var preset = savedPresets[currentPresetIndex];
+    preset.correctAnswers = [];
+    preset.wrongAnswers = [];
+
+    for (var i = 1; i <= totalQuestions; i++) {
+        var answerElement = document.getElementById(`answer${i}`);
+        var answer = answerElement.textContent;
+
+        if (answerElement.classList.contains('correct-answer')) {
+            preset.correctAnswers.push(i);
+        } else if (answerElement.classList.contains('wrong-answer')) {
+            preset.wrongAnswers.push(i);
+        }
+    }
+
+    savedPresets[currentPresetIndex] = preset;
+    savePresetsToLocalStorage();
+}
+
 // Function to update options in the "Jump to Question" dropdown
 function updateJumpToOptions() {
   var jumpToSelect = document.getElementById('jumpToQuestion');
