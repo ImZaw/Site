@@ -46,7 +46,7 @@ function chooseOption(option, questionNumber) {
   if(currentPresetIndex !== -1) {updatePreset(currentPresetIndex, true)}
 }
 function loadSummaryResults() {
-    var preset = savedPresets[index];
+    var preset = savedPresets[currentPresetIndex];
     preset.correctAnswers.forEach(questionNumber => {
         document.getElementById(`answer${questionNumber}`).classList.add('correct-answer');
     });
