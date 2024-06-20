@@ -43,9 +43,10 @@ function chooseOption(option, questionNumber) {
   var selectedButton = document.querySelector(`#question${questionNumber} .option[data-option="${option}"]`);
   selectedButton.classList.add('selected');
   document.getElementById(questionName).value = option;
-  if(currentPresetIndex !== -1) {updatePreset(currentPresetIndex)}
+  if(currentPresetIndex !== -1) {updatePreset(currentPresetIndex, true)}
 }
-function loadSummaryResults(preset) {
+function loadSummaryResults() {
+    var preset = savedPresets[index];
     preset.correctAnswers.forEach(questionNumber => {
         document.getElementById(`answer${questionNumber}`).classList.add('correct-answer');
     });
