@@ -18,10 +18,10 @@ function generateQuestions(number) {
       <div class="card" id="question${i}" style="display: ${i === 1 ? 'block' : 'none'};">
         <h3>Question ${i}</h3>
         <div class="options-container">
-          <button type="button" class="option" onclick="chooseOption('أ', ${i})" data-option="أ">أ</button>
-          <button type="button" class="option" onclick="chooseOption('ب', ${i})" data-option="ب">ب</button>
-          <button type="button" class="option" onclick="chooseOption('ج', ${i})" data-option="ج">ج</button>
-          <button type="button" class="option" onclick="chooseOption('د', ${i})" data-option="د">د</button>
+          <button type="button" class="option" onclick="chooseOption('A', ${i})" data-option="A">A</button>
+          <button type="button" class="option" onclick="chooseOption('B', ${i})" data-option="B">B</button>
+          <button type="button" class="option" onclick="chooseOption('C', ${i})" data-option="C">C</button>
+          <button type="button" class="option" onclick="chooseOption('D', ${i})" data-option="D">D</button>
         </div>
         <input type="hidden" id="q${i}" name="q${i}" value="">
       </div>
