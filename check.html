@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Availability Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        input, button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Site Availability Checker</h1>
+    <input type="text" id="urlInput" placeholder="Enter site URL">
+    <button onclick="startChecking()">Start Checking</button>
+    <button onclick="stopChecking()">Stop Checking</button>
+    <p id="status"></p>
+    <script>
+        let intervalId;
+
+        function startChecking() {
+            const url = document.getElementById('urlInput').value;
+            if (!url) {
+                alert('Please enter a URL');
+                return;
+            }
+
+            intervalId = setInterval(() => {
+                checkSiteAvailability(url);
+            }, 10000); // Check every 10 seconds
+
+            checkSiteAvailability(url); // Initial check immediately
+        }
+
+        function stopChecking() {
+            clearInterval(intervalId);
+            document.getElementById('status').innerText = 'Stopped checking';
+        }
+
+        function checkSiteAvailability(url) {
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            fetch(proxyUrl + url)
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('status').innerText = `${url} is available`;
+                        window.open(url, '_blank');
+                    } else {
+                        document.getElementById('status').innerText = `${url} is not available`;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('status').innerText = `${url} is not available`;
+                });
+        }
+    </script>
+</body>
+</html>
